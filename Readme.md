@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Антон Меднов](https://up.htmlacademy.ru/javascript/11/user/200889).
-* Наставник: `Неизвестно`.
+* Наставник: `none`.
 
 ---
 
