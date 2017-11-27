@@ -4,9 +4,9 @@ var getRandomValue = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var compareRandom = function () {
-  return Math.random() > 0.5;
-};
+// var compareRandom = function () {
+//   return Math.random() > 0.5;
+// };
 
 var addRandomComments = function (comments) {
   var randomComments = [];
@@ -24,7 +24,7 @@ var getPhotos = function () {
   for (var i = 0; i < maxPhotos; i++) {
     photos[i] = i + 1;
   }
-  photos.sort(compareRandom);
+  // photos.sort(compareRandom);
   return photos;
 };
 
@@ -71,13 +71,13 @@ var fillBlockPictures = function (info) {
 
 var postsInfo = generatePostInfo();
 
-var fillGalleryOverlay = function () {
+var fillGalleryOverlay = function (object) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   galleryOverlay.classList.remove('hidden');
-  galleryOverlay.querySelector('.gallery-overlay-image').src = postsInfo[0].url;
-  galleryOverlay.querySelector('.likes-count').textContent = postsInfo[0].likes;
-  galleryOverlay.querySelector('.comments-count').textContent = postsInfo[0].comments.length;
+  galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
+  galleryOverlay.querySelector('.likes-count').textContent = object.likes;
+  galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
 };
 
 fillBlockPictures(postsInfo);
-fillGalleryOverlay();
+fillGalleryOverlay(postsInfo[0]);
