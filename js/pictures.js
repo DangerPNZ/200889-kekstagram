@@ -24,6 +24,7 @@ var getPhotos = function () {
   for (var i = 0; i < maxPhotos; i++) {
     photos[i] = i + 1;
   }
+  // сортировка в случайном порядке
   // photos.sort(compareRandom);
   return photos;
 };
