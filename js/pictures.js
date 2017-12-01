@@ -59,8 +59,9 @@ var createPost = function (postInfo) {
   return element;
 };
 
+var picturesContainer = document.querySelector('.pictures');
+
 var fillBlockPictures = function (info) {
-  var picturesContainer = document.querySelector('.pictures');
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < info.length; i++) {
     var postInfo = info[i];
@@ -72,13 +73,46 @@ var fillBlockPictures = function (info) {
 
 var postsInfo = generatePostInfo();
 
-var fillGalleryOverlay = function (object) {
-  var galleryOverlay = document.querySelector('.gallery-overlay');
-  galleryOverlay.classList.remove('hidden');
-  galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
-  galleryOverlay.querySelector('.likes-count').textContent = object.likes;
-  galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
+// var selectImage = function () {
+//   var galleryOverlay = document.querySelector('.gallery-overlay');
+//   var galleryImage = galleryOverlay.querySelector('.gallery-overlay-preview img');
+//   picturesContainer.addEventListener('click', function (event) {
+//     if (event.target.closest('.picture')) {
+//       event.preventDefault();
+//       galleryOverlay.classList.remove('hidden');
+//       galleryImage.src = event.target.src;
+//     }
+//   });
+// };
+
+
+var selectImage = function () {
+  var picture = picturesContainer.querySelectorAll('.picture');
+
+  var postClickHandler = function (event) {
+    event.preventDefault();
+    console.log(x);
+    var elementIndex = x;
+    var galleryOverlay = document.querySelector('.gallery-overlay');
+    var galleryImage = galleryOverlay.querySelector('.gallery-overlay-preview img');
+    galleryOverlay.classList.remove('hidden');
+    galleryImage.src = postsInfo[elementIndex].url;
+  };
+  for (var x = 0; x < picture.length; x++) {
+    picture[x].addEventListener('click', postClickHandler);
+  }
+
 };
 
+
+// var fillGalleryOverlay = function (object) {
+//   var galleryOverlay = document.querySelector('.gallery-overlay');
+//   galleryOverlay.classList.remove('hidden');
+//   galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
+//   galleryOverlay.querySelector('.likes-count').textContent = object.likes;
+//   galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
+// };
+
 fillBlockPictures(postsInfo);
-fillGalleryOverlay(postsInfo[0]);
+
+selectImage();
