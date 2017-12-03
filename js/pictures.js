@@ -94,17 +94,18 @@ var removeCloseHandlers = function () {
 
 var addCloseHandlers = function (event) {
   event.preventDefault();
-  galleryOverlay.classList.add('hidden');
-
+  if (event.type === 'click') {
+    galleryOverlay.classList.add('hidden');
+    removeCloseHandlers();
+  }
   if (event.keyCode === ENTER_KEY_CODE) {
     galleryOverlay.classList.add('hidden');
+    removeCloseHandlers();
   }
-
   if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
     galleryOverlay.classList.add('hidden');
+    removeCloseHandlers();
   }
-
-  removeCloseHandlers();
 };
 
 
