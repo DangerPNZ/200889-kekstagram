@@ -76,8 +76,28 @@ var fillBlockPictures = function (info) {
 };
 
 var postsInfo = generatePostInfo();
-
 var galleryOverlay = document.querySelector('.gallery-overlay');
+var closeBtn = galleryOverlay.querySelector('.gallery-overlay-close');
+
+var clickCloseBtnHandler = function (event) {
+  event.preventDefault();
+  galleryOverlay.classList.add('hidden');
+  closeBtn.removeEventListener('click', clickCloseBtnHandler);
+};
+
+var pressCloseBtnHandler = function (event) {
+  if (event.keyCode === ENTER_KEY_CODE) {
+    galleryOverlay.classList.add('hidden');
+    closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
+  }
+};
+
+var escBtnHandler = function (event) {
+  if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
+    galleryOverlay.classList.add('hidden');
+    document.removeEventListener('keydown', escBtnHandler);
+  }
+};
 
 var postClickHandler = function (event) {
   event.preventDefault();
@@ -86,43 +106,25 @@ var postClickHandler = function (event) {
   galleryOverlay.querySelector('.gallery-overlay-image').src = postsInfo[currentPictureIndex].url;
   galleryOverlay.querySelector('.comments-count').textContent = postsInfo[currentPictureIndex].comments.length;
   galleryOverlay.querySelector('.likes-count').textContent = postsInfo[currentPictureIndex].likes;
-};
-
-var clickCloseBtnHandler = function (event) {
-  event.preventDefault();
-  galleryOverlay.classList.add('hidden');
-};
-
-var pressCloseBtnHandler = function (event) {
-  if (event.keyCode === ENTER_KEY_CODE) {
-    galleryOverlay.classList.add('hidden');
-  }
-};
-
-var escBtnHandler = function (event) {
-  if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
-    galleryOverlay.classList.add('hidden');
-  }
+  closeBtn.addEventListener('click', clickCloseBtnHandler);
+  closeBtn.addEventListener('keydown', pressCloseBtnHandler);
+  document.addEventListener('keydown', escBtnHandler);
 };
 
 var addHandlers = function () {
   var picture = picturesContainer.querySelectorAll('.picture');
-  var closeBtn = galleryOverlay.querySelector('.gallery-overlay-close');
 
   for (var x = 0; x < picture.length; x++) {
     picture[x].addEventListener('click', postClickHandler);
   }
 
-  closeBtn.addEventListener('click', clickCloseBtnHandler);
-  closeBtn.addEventListener('keydown', pressCloseBtnHandler);
-  document.addEventListener('keydown', escBtnHandler);
 };
 // var fillGalleryOverlay = function (object) {
-//   var galleryOverlay = document.querySelector('.gallery-overlay');
 //   galleryOverlay.classList.remove('hidden');
 //   galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
 //   galleryOverlay.querySelector('.likes-count').textContent = object.likes;
 //   galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
 // };
 fillBlockPictures(postsInfo);
+// fillGalleryOverlay(postsInfo[0]);
 addHandlers();
