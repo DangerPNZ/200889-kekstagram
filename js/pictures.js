@@ -87,38 +87,34 @@ var fillGalleryOverlay = function (object) {
 };
 
 var removeCloseHandlers = function () {
-  closeBtn.removeEventListener('click', clickCloseBtnHandler);
-  closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
-  document.removeEventListener('keydown', escBtnHandler);
+  closeBtn.removeEventListener('click', addCloseHandlers);
+  closeBtn.removeEventListener('keydown', addCloseHandlers);
+  document.removeEventListener('keydown', addCloseHandlers);
 };
 
-var clickCloseBtnHandler = function (event) {
+var addCloseHandlers = function (event) {
   event.preventDefault();
   galleryOverlay.classList.add('hidden');
+
+  if (event.keyCode === ENTER_KEY_CODE) {
+    galleryOverlay.classList.add('hidden');
+  }
+
+  if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
+    galleryOverlay.classList.add('hidden');
+  }
+
   removeCloseHandlers();
 };
 
-var pressCloseBtnHandler = function (event) {
-  if (event.keyCode === ENTER_KEY_CODE) {
-    galleryOverlay.classList.add('hidden');
-    removeCloseHandlers();
-  }
-};
-
-var escBtnHandler = function (event) {
-  if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
-    galleryOverlay.classList.add('hidden');
-    removeCloseHandlers();
-  }
-};
 
 var postClickHandler = function (event) {
   event.preventDefault();
   var currentPictureIndex = event.currentTarget.getAttribute('data-id');
   fillGalleryOverlay(postsInfo[currentPictureIndex]);
-  closeBtn.addEventListener('click', clickCloseBtnHandler);
-  closeBtn.addEventListener('keydown', pressCloseBtnHandler);
-  document.addEventListener('keydown', escBtnHandler);
+  closeBtn.addEventListener('click', addCloseHandlers);
+  closeBtn.addEventListener('keydown', addCloseHandlers);
+  document.addEventListener('keydown', addCloseHandlers);
 };
 
 var addHandlers = function () {
