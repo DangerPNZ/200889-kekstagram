@@ -79,23 +79,29 @@ var postsInfo = generatePostInfo();
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var closeBtn = galleryOverlay.querySelector('.gallery-overlay-close');
 
+var removeCloseHandlers = function () {
+  closeBtn.removeEventListener('click', clickCloseBtnHandler);
+  closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
+  document.removeEventListener('keydown', escBtnHandler);
+};
+
 var clickCloseBtnHandler = function (event) {
   event.preventDefault();
   galleryOverlay.classList.add('hidden');
-  closeBtn.removeEventListener('click', clickCloseBtnHandler);
+  removeCloseHandlers();
 };
 
 var pressCloseBtnHandler = function (event) {
   if (event.keyCode === ENTER_KEY_CODE) {
     galleryOverlay.classList.add('hidden');
-    closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
+    removeCloseHandlers();
   }
 };
 
 var escBtnHandler = function (event) {
   if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
     galleryOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', escBtnHandler);
+    removeCloseHandlers();
   }
 };
 
@@ -113,18 +119,21 @@ var postClickHandler = function (event) {
 
 var addHandlers = function () {
   var picture = picturesContainer.querySelectorAll('.picture');
-
   for (var x = 0; x < picture.length; x++) {
     picture[x].addEventListener('click', postClickHandler);
   }
-
 };
+
 // var fillGalleryOverlay = function (object) {
 //   galleryOverlay.classList.remove('hidden');
 //   galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
 //   galleryOverlay.querySelector('.likes-count').textContent = object.likes;
 //   galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
+//   closeBtn.addEventListener('click', clickCloseBtnHandler);
+//   closeBtn.addEventListener('keydown', pressCloseBtnHandler);
+//   document.addEventListener('keydown', escBtnHandler);
 // };
+
 fillBlockPictures(postsInfo);
 // fillGalleryOverlay(postsInfo[0]);
 addHandlers();
