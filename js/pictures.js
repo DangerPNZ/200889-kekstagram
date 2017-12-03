@@ -79,6 +79,13 @@ var postsInfo = generatePostInfo();
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var closeBtn = galleryOverlay.querySelector('.gallery-overlay-close');
 
+var fillGalleryOverlay = function (object) {
+  galleryOverlay.classList.remove('hidden');
+  galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
+  galleryOverlay.querySelector('.likes-count').textContent = object.likes;
+  galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
+};
+
 var removeCloseHandlers = function () {
   closeBtn.removeEventListener('click', clickCloseBtnHandler);
   closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
@@ -107,11 +114,8 @@ var escBtnHandler = function (event) {
 
 var postClickHandler = function (event) {
   event.preventDefault();
-  galleryOverlay.classList.remove('hidden');
   var currentPictureIndex = event.currentTarget.getAttribute('data-id');
-  galleryOverlay.querySelector('.gallery-overlay-image').src = postsInfo[currentPictureIndex].url;
-  galleryOverlay.querySelector('.comments-count').textContent = postsInfo[currentPictureIndex].comments.length;
-  galleryOverlay.querySelector('.likes-count').textContent = postsInfo[currentPictureIndex].likes;
+  fillGalleryOverlay(postsInfo[currentPictureIndex]);
   closeBtn.addEventListener('click', clickCloseBtnHandler);
   closeBtn.addEventListener('keydown', pressCloseBtnHandler);
   document.addEventListener('keydown', escBtnHandler);
@@ -124,16 +128,5 @@ var addHandlers = function () {
   }
 };
 
-// var fillGalleryOverlay = function (object) {
-//   galleryOverlay.classList.remove('hidden');
-//   galleryOverlay.querySelector('.gallery-overlay-image').src = object.url;
-//   galleryOverlay.querySelector('.likes-count').textContent = object.likes;
-//   galleryOverlay.querySelector('.comments-count').textContent = object.comments.length;
-//   closeBtn.addEventListener('click', clickCloseBtnHandler);
-//   closeBtn.addEventListener('keydown', pressCloseBtnHandler);
-//   document.addEventListener('keydown', escBtnHandler);
-// };
-
 fillBlockPictures(postsInfo);
-// fillGalleryOverlay(postsInfo[0]);
 addHandlers();
