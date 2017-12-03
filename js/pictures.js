@@ -87,35 +87,42 @@ var fillGalleryOverlay = function (object) {
 };
 
 var removeCloseHandlers = function () {
-  closeBtn.removeEventListener('click', addCloseHandlers);
-  closeBtn.removeEventListener('keydown', addCloseHandlers);
-  document.removeEventListener('keydown', addCloseHandlers);
+  closeBtn.removeEventListener('click', clickCloseBtnHandler);
+  closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
+  document.removeEventListener('keydown', escBtnHandler);
 };
 
-var addCloseHandlers = function (event) {
+var clickCloseBtnHandler = function (event) {
   event.preventDefault();
-  if (event.type === 'click') {
-    galleryOverlay.classList.add('hidden');
-    removeCloseHandlers();
-  }
+  galleryOverlay.classList.add('hidden');
+  removeCloseHandlers();
+};
+
+var pressCloseBtnHandler = function (event) {
   if (event.keyCode === ENTER_KEY_CODE) {
     galleryOverlay.classList.add('hidden');
     removeCloseHandlers();
   }
+};
+
+var escBtnHandler = function (event) {
   if (event.keyCode === ESC_KEY_CODE && !galleryOverlay.classList.contains('hidden')) {
     galleryOverlay.classList.add('hidden');
     removeCloseHandlers();
   }
 };
 
+var addCloseHandlers = function () {
+  closeBtn.addEventListener('click', clickCloseBtnHandler);
+  closeBtn.addEventListener('keydown', pressCloseBtnHandler);
+  document.addEventListener('keydown', escBtnHandler);
+};
 
 var postClickHandler = function (event) {
   event.preventDefault();
   var currentPictureIndex = event.currentTarget.getAttribute('data-id');
   fillGalleryOverlay(postsInfo[currentPictureIndex]);
-  closeBtn.addEventListener('click', addCloseHandlers);
-  closeBtn.addEventListener('keydown', addCloseHandlers);
-  document.addEventListener('keydown', addCloseHandlers);
+  addCloseHandlers();
 };
 
 var addHandlers = function () {
