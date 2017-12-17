@@ -138,7 +138,28 @@ var uploadImageInput = uploadImageForm.querySelector('#upload-file');
 var uploadOverlay = uploadImageForm.querySelector('.upload-overlay');
 var uploadCloseBtn = uploadImageForm.querySelector('.upload-form-cancel');
 var effectSwitches = uploadImageForm.querySelectorAll('input[name="effect"]');
-var image = uploadImageForm.querySelector('.effect-image-preview');
+var scaleValueInput = uploadImageForm.querySelector('.upload-resize-controls-value');
+var photo = uploadImageForm.querySelector('.effect-image-preview');
+var initialScaleValue = parseInt(scaleValueInput.value, 10);
+var hashtagsInput = uploadImageForm.querySelector('.upload-form-hashtags');
+var descriptionInput = uploadImageForm.querySelector('.upload-form-description');
+var activedEffect = null;
+var labelNone = uploadImageForm.querySelector('label[for=upload-effect-none]');
+var cleanEffects = function () {
+  if (activedEffect) {
+    photo.classList.remove(activedEffect);
+    labelNone.focus();
+  }
+}
+
+var returnInitialFormState = function () {
+  setImageScale(parseInt(initialScaleValue, 10));
+  scaleValueInput.value = initialScaleValue + '%';
+  hashtagsInput.value = '';
+  hashtagsInput.style.borderColor = 'initial';
+  descriptionInput.value = '';
+  cleanEffects();
+};
 
 var uploadChangeHandler = function () {
   uploadOverlay.classList.remove('hidden');
@@ -155,12 +176,14 @@ var removeUploadCloseHandlers = function () {
 
 var clickUploadCloseBtnHandler = function (event) {
   event.preventDefault();
+  returnInitialFormState();
   uploadOverlay.classList.add('hidden');
   removeUploadCloseHandlers();
 };
 
 var pressUploadCloseBtnHandler = function (event) {
   if (event.keyCode === ENTER_KEY_CODE) {
+    returnInitialFormState();
     uploadOverlay.classList.add('hidden');
     removeUploadCloseHandlers();
   }
@@ -168,6 +191,7 @@ var pressUploadCloseBtnHandler = function (event) {
 
 var escUploadBtnHandler = function (event) {
   if (event.keyCode === ESC_KEY_CODE) {
+    returnInitialFormState();
     uploadOverlay.classList.add('hidden');
     removeUploadCloseHandlers();
   }
@@ -179,34 +203,43 @@ var addUploadCloseHandlers = function () {
   document.addEventListener('keydown', escUploadBtnHandler);
 };
 
-var changeScaleValue = function () {
-  var scaleValueInput = uploadImageForm.querySelector('.upload-resize-controls-value');
+
+var setImageScale = function (val) {
+  photo.style.transform = 'scale(' + (val / 100) + ')';
+};
+
+var changeImageScale = function () {
   var btnMinus = uploadImageForm.querySelector('.upload-resize-controls-button-dec');
   var btnPlus = uploadImageForm.querySelector('.upload-resize-controls-button-inc');
   var scaleChangeStep = 25;
-  var initialValue = scaleValueInput.value;
-  var currentValue = scaleValueInput.value;
+
+  setImageScale(initialScaleValue);
 
   btnMinus.addEventListener('click', function () {
-    if (currentValue > 0) {
-      scaleValueInput.value = String(parseInt(currentValue, 10) - scaleChangeStep + '%');
+    var currentScaleValue = parseInt(scaleValueInput.value, 10);
+    if (currentScaleValue > 25) {
+      scaleValueInput.value = currentScaleValue - scaleChangeStep + '%';
+      setImageScale(parseInt(scaleValueInput.value, 10));
+    }
+  });
+
+  btnPlus.addEventListener('click', function () {
+    var currentScaleValue = parseInt(scaleValueInput.value, 10);
+    if (currentScaleValue < 100) {
+      scaleValueInput.value = currentScaleValue + scaleChangeStep + '%';
+      setImageScale(parseInt(scaleValueInput.value, 10));
     }
   });
 };
 
-var cleanEffects = function () {
-  image.classList.remove('effect-none');
-  image.classList.remove('effect-chrome');
-  image.classList.remove('effect-sepia');
-  image.classList.remove('effect-marvin');
-  image.classList.remove('effect-phobos');
-  image.classList.remove('effect-heat');
-};
 var selectEffect = function (event) {
-  cleanEffects();
+  if (activedEffect) {
+    cleanEffects();
+  }
   // var effect = event.currentTarget.id
   // effect = effect.slice(7)
-  image.classList.add('effect-' + event.currentTarget.value);
+  activedEffect = 'effect-' + event.currentTarget.value;
+  photo.classList.add(activedEffect);
 };
 
 var addEffectSelectHandlers = function () {
@@ -215,9 +248,41 @@ var addEffectSelectHandlers = function () {
   }
 };
 
+
+var getHashtags = function () {
+  return hashtagsInput.value.split(/\s+/);
+};
+
+var controlHashtagsValidity = function () {
+
+  var hashtags = getHashtags();
+
+  var hasOverflowHashtagLength = hashtags.some(function (symb) {
+    return symb.length > 20;
+  });
+
+  var uncorrectTag = hashtags.some(function (symb) {
+    return symb[0] !== '#';
+  });
+
+  var hasRepeatHashtags = hashtags.some(function (tag) {
+    return hashtags.indexOf(tag) !== hashtags.lastIndexOf(tag);
+  });
+
+  if (hashtags.length > 5 || hasOverflowHashtagLength || uncorrectTag || hasRepeatHashtags) {
+    hashtagsInput.setCustomValidity('Поле заполненно некорректно');
+    hashtagsInput.style.borderColor = 'red';
+  } else {
+    hashtagsInput.setCustomValidity('');
+    hashtagsInput.style.borderColor = 'initial';
+  }
+};
+
+uploadImageForm.addEventListener('submit', controlHashtagsValidity);
+
+
 fillBlockPictures(postsInfo);
 addHandlers();
-
 //
-changeScaleValue();
+changeImageScale();
 addEffectSelectHandlers();
