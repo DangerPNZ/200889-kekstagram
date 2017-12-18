@@ -1,17 +1,18 @@
 'use strict';
-
 (function () {
-  var picturesContainer = document.querySelector('.pictures');
-  var postsInfo = window.data.generatePostInfo();
 
-  var fillBlockPictures = function (info) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < info.length; i++) {
-      var postInfo = info[i];
-      var newPostElement = window.data.createPost(postInfo);
-      fragment.appendChild(newPostElement);
-    }
-    picturesContainer.appendChild(fragment);
+  var create = function (postInfo) {
+    var templateContent = document.querySelector('#picture-template').content;
+    var fragment = templateContent.cloneNode(true);
+    fragment.querySelector('img').src = postInfo.url;
+    fragment.querySelector('.picture-likes').textContent = postInfo.likes;
+    fragment.querySelector('.picture-comments').textContent = postInfo.comments.length;
+    fragment.querySelector('a').setAttribute('data-id', postInfo.id);
+    var element = fragment.querySelector('a.picture');
+    return element;
   };
-  fillBlockPictures(postsInfo);
+
+  window.picture = {
+    create: create
+  }
 })();

@@ -1,6 +1,6 @@
 'use strict';
-
 (function () {
+  /* module4-task2 */
   var uploadImageForm = document.querySelector('#upload-select-image');
   var uploadImageInput = uploadImageForm.querySelector('#upload-file');
   var uploadOverlay = uploadImageForm.querySelector('.upload-overlay');
@@ -51,7 +51,7 @@
   };
 
   var pressUploadCloseBtnHandler = function (event) {
-    if (event.keyCode === window.constants.ENTER_KEY_CODE) {
+    if (event.keyCode === ENTER_KEY_CODE) {
       returnInitialFormState();
       uploadOverlay.classList.add('hidden');
       removeUploadCloseHandlers();
@@ -59,7 +59,7 @@
   };
 
   var escUploadBtnHandler = function (event) {
-    if (event.keyCode === window.constants.ESC_KEY_CODE) {
+    if (event.keyCode === ESC_KEY_CODE) {
       returnInitialFormState();
       uploadOverlay.classList.add('hidden');
       removeUploadCloseHandlers();
@@ -105,8 +105,6 @@
     if (activedEffect) {
       cleanEffects();
     }
-    // var effect = event.currentTarget.id
-    // effect = effect.slice(7)
     activedEffect = 'effect-' + event.currentTarget.value;
     photo.classList.add(activedEffect);
   };
@@ -116,8 +114,7 @@
       effectSwitches[a].addEventListener('change', selectEffect);
     }
   };
-
-
+  
   var getHashtags = function () {
     return hashtagsInput.value.split(/\s+/);
   };
@@ -146,8 +143,8 @@
       hashtagsInput.style.borderColor = 'initial';
     }
   };
-  uploadImageForm.addEventListener('submit', controlHashtagsValidity);
-
+//
   changeImageScale();
   addEffectSelectHandlers();
+  uploadImageForm.addEventListener('submit', controlHashtagsValidity);
 })();
