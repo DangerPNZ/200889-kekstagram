@@ -114,7 +114,7 @@
       effectSwitches[a].addEventListener('change', selectEffect);
     }
   };
-  
+
   var getHashtags = function () {
     return hashtagsInput.value.split(/\s+/);
   };
@@ -143,8 +143,40 @@
       hashtagsInput.style.borderColor = 'initial';
     }
   };
-//
+  // drag
+  var pinEffectSaturation = uploadImageForm.querySelector('.upload-effect-level-pin');
+  var levelEffectBar = uploadImageForm.querySelector('.upload-effect-level-val');
+  pinEffectSaturation.addEventListener('mousedown', function (event) {
+    event.preventDefault();
+    var startCoords = {
+      x: event.clientX
+    };
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var xMin = 0;
+      var xMax = 455;
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+      startCoords = {
+        x: moveEvt.clientX
+      };
+      var currentX = pinEffectSaturation.offsetLeft - shift.x;
+      if (currentX >= xMin && currentX <= xMax) {
+        pinEffectSaturation.style.left = currentX + 'px';
+        levelEffectBar.style.width = parseInt(pinEffectSaturation.style.left, 10) + 'px';
+      }
+    };
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
   changeImageScale();
   addEffectSelectHandlers();
   uploadImageForm.addEventListener('submit', controlHashtagsValidity);
 })();
+
