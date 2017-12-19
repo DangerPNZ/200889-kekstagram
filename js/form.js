@@ -169,6 +169,7 @@
         levelEffectBar.style.width = parseInt(pinEffectSaturation.style.left, 10) + 'px';
         percent = Math.round(100 / window.constants.PIN_X_MAX * currentX);
         inputEffectSaturation.value = percent;
+        checkFilter(percent);
       }
     };
 
@@ -213,6 +214,5 @@
   changeImageScale();
   addEffectSelectHandlers();
   uploadImageForm.addEventListener('submit', controlHashtagsValidity);
-  checkFilter(percent);
 })();
 
