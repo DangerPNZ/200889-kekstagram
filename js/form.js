@@ -106,6 +106,7 @@
     }
     activedEffect = 'effect-' + event.currentTarget.value;
     photo.classList.add(activedEffect);
+    resetFilterValue();
   };
 
   var addEffectSelectHandlers = function () {
@@ -142,7 +143,6 @@
       hashtagsInput.style.borderColor = 'initial';
     }
   };
-  // drag
   var pinEffectSaturation = uploadImageForm.querySelector('.upload-effect-level-pin');
   var levelEffectBar = uploadImageForm.querySelector('.upload-effect-level-val');
   var inputEffectSaturation = uploadImageForm.querySelector('.upload-effect-level-value');
@@ -181,6 +181,12 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+  var resetFilterValue = function () {
+    inputEffectSaturation.value = 0;
+    levelEffectBar.style.width = 0;
+    pinEffectSaturation.style.left = 0;
+    photo.style.filter = 'none';
+  }
   var checkFilter = function (newPercent) {
     for (var n = 0; n < effectSwitches.length; n++) {
       if (effectSwitches[n].checked) {
