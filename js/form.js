@@ -5,9 +5,7 @@
   var uploadOverlay = uploadImageForm.querySelector('.upload-overlay');
   var uploadCloseBtn = uploadImageForm.querySelector('.upload-form-cancel');
   var effectSwitches = uploadImageForm.querySelectorAll('input[name="effect"]');
-  var scaleValueInput = uploadImageForm.querySelector('.upload-resize-controls-value');
   var photo = uploadImageForm.querySelector('.effect-image-preview');
-  var initialScaleValue = parseInt(scaleValueInput.value, 10);
   var hashtagsInput = uploadImageForm.querySelector('.upload-form-hashtags');
   var descriptionInput = uploadImageForm.querySelector('.upload-form-description');
   var activedEffect = null;
@@ -21,8 +19,7 @@
   };
 
   var returnInitialFormState = function () {
-    setImageScale(parseInt(initialScaleValue, 10));
-    scaleValueInput.value = initialScaleValue + '%';
+    setImageScale(window.constants.SCALE_START_VALUE);
     hashtagsInput.value = '';
     hashtagsInput.style.borderColor = 'initial';
     descriptionInput.value = '';
@@ -75,38 +72,20 @@
   var setImageScale = function (val) {
     photo.style.transform = 'scale(' + (val / 100) + ')';
   };
+  setImageScale(window.constants.SCALE_START_VALUE);
 
-  var changeImageScale = function () {
-    var btnMinus = uploadImageForm.querySelector('.upload-resize-controls-button-dec');
-    var btnPlus = uploadImageForm.querySelector('.upload-resize-controls-button-inc');
-    var scaleChangeStep = 25;
+  window.initilize(uploadImageForm, setImageScale);
 
-    setImageScale(initialScaleValue);
-
-    btnMinus.addEventListener('click', function () {
-      var currentScaleValue = parseInt(scaleValueInput.value, 10);
-      if (currentScaleValue > 25) {
-        scaleValueInput.value = currentScaleValue - scaleChangeStep + '%';
-        setImageScale(parseInt(scaleValueInput.value, 10));
-      }
-    });
-
-    btnPlus.addEventListener('click', function () {
-      var currentScaleValue = parseInt(scaleValueInput.value, 10);
-      if (currentScaleValue < 100) {
-        scaleValueInput.value = currentScaleValue + scaleChangeStep + '%';
-        setImageScale(parseInt(scaleValueInput.value, 10));
-      }
-    });
+  var applyFilter = function (newFilter) {
+    photo.classList.remove('effect-' + activedEffect);
+    resetFilterValue();
+    photo.classList.add('effect-' + newFilter);
+    activedEffect = newFilter;
   };
 
   var selectEffect = function (event) {
-    if (activedEffect) {
-      cleanEffects();
-    }
-    activedEffect = 'effect-' + event.currentTarget.value;
-    photo.classList.add(activedEffect);
-    resetFilterValue();
+    var filterElement = event.currentTarget;
+    window.initializeFilters(filterElement, applyFilter);
   };
 
   var addEffectSelectHandlers = function () {
@@ -186,7 +165,7 @@
     levelEffectBar.style.width = 0;
     pinEffectSaturation.style.left = 0;
     photo.style.filter = 'none';
-  }
+  };
   var checkFilter = function (newPercent) {
     for (var n = 0; n < effectSwitches.length; n++) {
       if (effectSwitches[n].checked) {
@@ -217,7 +196,7 @@
       }
     }
   };
-  changeImageScale();
+  window.initilize(uploadImageForm, setImageScale);
   addEffectSelectHandlers();
   uploadImageForm.addEventListener('submit', controlHashtagsValidity);
 })();
