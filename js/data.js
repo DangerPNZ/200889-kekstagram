@@ -48,6 +48,6 @@
 
   window.data = {
     posts: generatePostInfo()
-  }
+  };
 
 })();

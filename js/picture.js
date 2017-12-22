@@ -14,5 +14,5 @@
 
   window.picture = {
     create: create
-  }
+  };
 })();

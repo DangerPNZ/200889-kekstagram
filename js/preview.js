@@ -14,5 +14,5 @@
     container: galleryOverlay,
     closeBtn: galleryOverlayBtn,
     fill: fillGalleryOverlay
-  }
+  };
 })();
