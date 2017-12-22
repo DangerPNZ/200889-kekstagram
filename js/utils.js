@@ -6,5 +6,5 @@
 
   window.utils = {
     getRandomValue: getRandomValue
-  }
+  };
 })();
