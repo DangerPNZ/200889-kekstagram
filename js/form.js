@@ -95,7 +95,7 @@
   };
 
   var getHashtags = function () {
-    return hashtagsInput.value.split(/\s+/);
+    return hashtagsInput.value === '' ? [] : hashtagsInput.value.split(/\s+/);
   };
 
   var controlHashtagsValidity = function () {
@@ -207,7 +207,7 @@
     errorBlock.textContent = onError;
     document.body.insertAdjacentElement('afterbegin', errorBlock);
   };
-  uploadImageForm.querySelector('submit', function (event) {
+  uploadImageForm.addEventListener('submit', function (event) {
     event.preventDefault();
     window.backend.save(new FormData(uploadImageForm), onSuccessFunc, onSuccesError);
   });
