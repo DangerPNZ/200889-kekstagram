@@ -10,7 +10,7 @@
     SCALE_MIN_VALUE: 25,
     SCALE_MAX_VALUE: 100,
     SCALE_START_VALUE: 50,
-    DOWNLOAD_URL: '//js.dump.academy/kekstagram/data',
+    DOWNLOAD_URL: 'https://js.dump.academy/kekstagram/data',
     UPLOAD_URL: 'https://js.dump.academy/kekstagram'
   };
 })();

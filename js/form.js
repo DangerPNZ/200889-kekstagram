@@ -196,6 +196,21 @@
       }
     }
   };
+  var onSuccessFunc = function () {
+    uploadImageForm.send();
+    returnInitialFormState();
+  };
+
+  var onSuccesError = function (onError) {
+    var errorBlock = document.createElement('div');
+    errorBlock.style = 'z-index: 50; margin: 0 auto; padding: 20px 0; text-align: center; background-color: yellow; color: #000; position: absolute; left: 0; top: 0; width: 100%; font-size: 30px; font-weight: 700; box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.5);';
+    errorBlock.textContent = onError;
+    document.body.insertAdjacentElement('afterbegin', errorBlock);
+  };
+  uploadImageForm.querySelector('submit', function (event) {
+    event.preventDefault();
+    window.backend.save(new FormData(uploadImageForm), onSuccessFunc, onSuccesError);
+  });
   window.initilize(uploadImageForm, setImageScale);
   addEffectSelectHandlers();
   uploadImageForm.addEventListener('submit', controlHashtagsValidity);
