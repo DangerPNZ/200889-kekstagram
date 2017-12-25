@@ -209,6 +209,7 @@
   };
   uploadImageForm.addEventListener('submit', function (event) {
     event.preventDefault();
+    addEffectSelectHandlers();
     window.backend.save(new FormData(uploadImageForm), onSuccessFunc, onSuccesError);
   });
   window.initilize(uploadImageForm, setImageScale);
