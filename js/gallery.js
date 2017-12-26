@@ -4,8 +4,8 @@
   var filtersBlock = document.querySelector('.filters');
   var filtersRadioElements = filtersBlock.querySelectorAll('.filters-radio');
   var picturesElements = [];
-  var picturesData = [];
-
+  var initialData = [];
+  var sortedData = [];
   var showFiltersBlock = function () {
     filtersBlock.classList.remove('filters-inactive');
   };
@@ -16,6 +16,7 @@
   };
 
   var fillBlockPictures = function (info) {
+    info = info.slice();
     var fragment = document.createDocumentFragment();
     picturesElements = [];
     for (var i = 0; i < info.length; i++) {
@@ -44,10 +45,11 @@
       default:
         sortFunc = null;
     }
-    var sortedData = sortFunc ? picturesData.slice().sort(sortFunc) : picturesData;
+    sortedData = sortFunc ? sortedData.sort(sortFunc) : initialData.slice();
     clearBlockPictures();
     fillBlockPictures(sortedData);
   };
+
 
   var removeCloseHandlers = function () {
     window.preview.closeBtn.removeEventListener('click', clickCloseBtnHandler);
@@ -84,7 +86,7 @@
   var postClickHandler = function (event) {
     event.preventDefault();
     var currentPictureIndex = event.currentTarget.getAttribute('data-id');
-    window.preview.fill(picturesData[currentPictureIndex]);
+    window.preview.fill(sortedData[currentPictureIndex]);
     window.preview.closeBtn.focus();
     addCloseHandlers();
   };
@@ -96,7 +98,8 @@
   };
 
   var onSuccessHandler = function (data) {
-    picturesData = data;
+    initialData = data;
+    sortedData = initialData.slice();
     fillBlockPictures(data);
     showFiltersBlock();
   };
