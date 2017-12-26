@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.initilize = function (element, callback) {
+  window.initilizeScale = function (element, callback) {
     var btnMinus = element.querySelector('.upload-resize-controls-button-dec');
     var btnPlus = element.querySelector('.upload-resize-controls-button-inc');
     var scaleValueInput = element.querySelector('.upload-resize-controls-value');
