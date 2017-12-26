@@ -49,7 +49,6 @@
     fillBlockPictures(sortedData);
   };
 
-
   var removeCloseHandlers = function () {
     window.preview.closeBtn.removeEventListener('click', clickCloseBtnHandler);
     window.preview.closeBtn.removeEventListener('keydown', pressCloseBtnHandler);
