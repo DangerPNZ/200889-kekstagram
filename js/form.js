@@ -6,6 +6,7 @@
 
   var photo = uploadImageForm.querySelector('.effect-image-preview');
   var hashtagsInput = uploadImageForm.querySelector('.upload-form-hashtags');
+  var uploadFormDescription = uploadImageForm.querySelector('.upload-form-description');
   var uploadButtonSubmit = uploadImageForm.querySelector('.upload-form-submit');
   var descriptionInput = uploadImageForm.querySelector('.upload-form-description');
   var uploadCloseBtn = uploadImageForm.querySelector('.upload-form-cancel');
@@ -167,10 +168,10 @@
     }
   };
 
-
   var onSuccessHandler = function () {
     uploadEffectLevel.style.display = 'none';
     hashtagsInput.value = '';
+    uploadFormDescription.value = '';
     effectNone.checked = true;
   };
 
