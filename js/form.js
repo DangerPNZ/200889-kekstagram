@@ -36,16 +36,10 @@
     window.initializeFilters(filterElement, applyFilter);
   };
 
-  var setDefaultFilterValue = function () {
-    inputEffectSaturation.value = window.constants.DEFAULT_EFFECT_VALUE;
-    levelEffectBar.style.width = '91px';
-    pinEffectSaturation.style.left = '91px';
-  };
-
   var applyFilter = function (newFilter) {
+    var currentValue = parseInt(inputEffectSaturation.value, 10);
+    checkFilter(currentValue);
     photo.classList.remove('effect-' + activedEffect);
-    setDefaultFilterValue();
-    checkFilter(window.constants.DEFAULT_EFFECT_VALUE);
     photo.classList.add('effect-' + newFilter);
     activedEffect = newFilter;
     if (newFilter === 'none') {
@@ -64,25 +58,29 @@
   };
 
   var getHashtags = function () {
-    return hashtagsInput.value ? hashtagsInput.value.split(/\s+/) : [];
+    var inputValue = hashtagsInput.value.toLowerCase();
+    inputValue = inputValue ? inputValue.split(/\s+/) : [];
+    return inputValue.filter(function (value) {
+      return value !== '';
+    });
   };
 
   var controlHashtagsValidity = function () {
     var hashtags = getHashtags();
 
-    var hasOverflowHashtagLength = hashtags.some(function (symb) {
-      return symb.length > 20;
+    var hasOverRangeHashtagLength = hashtags.some(function (hashTag) {
+      return hashTag.length > 20 || hashTag.length < 2;
     });
 
-    var uncorrectTag = hashtags.some(function (symb) {
-      return symb[0] !== '#';
+    var uncorrectTag = hashtags.some(function (hashTag) {
+      return hashTag[0] !== '#' || hashTag.indexOf('#') !== hashTag.lastIndexOf('#');
     });
 
-    var hasRepeatHashtags = hashtags.some(function (tag) {
-      return hashtags.indexOf(tag) !== hashtags.lastIndexOf(tag);
+    var hasRepeatHashtags = hashtags.some(function (hashTag) {
+      return hashtags.indexOf(hashTag) !== hashtags.lastIndexOf(hashTag);
     });
 
-    if (hashtags.length > 5 || hasOverflowHashtagLength || uncorrectTag || hasRepeatHashtags) {
+    if (hashtags.length > 5 || hasOverRangeHashtagLength || uncorrectTag || hasRepeatHashtags) {
       hashtagsInput.setCustomValidity('Поле заполненно некорректно');
       hashtagsInput.style.borderColor = 'red';
     } else {
@@ -171,7 +169,9 @@
 
 
   var onSuccessHandler = function () {
-    uploadImageForm.reset();
+    uploadEffectLevel.style.display = 'none';
+    hashtagsInput.value = '';
+    effectNone.checked = true;
   };
 
   var onErrorHandler = function (onError) {
@@ -221,6 +221,11 @@
 
   uploadButtonSubmit.addEventListener('click', function () {
     controlHashtagsValidity();
+  });
+
+  hashtagsInput.addEventListener('input', function () {
+    hashtagsInput.setCustomValidity('');
+    hashtagsInput.style.borderColor = 'initial';
   });
 
   uploadImageForm.addEventListener('submit', function (event) {

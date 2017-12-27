@@ -5,11 +5,11 @@
   };
 
   var sortByLikes = function (a, b) {
-    return a.likes - b.likes;
+    return b.likes - a.likes;
   };
 
   var sortByComments = function (a, b) {
-    return a.comments.length - b.comments.length;
+    return b.comments.length - a.comments.length;
   };
 
   var sortRandom = function () {

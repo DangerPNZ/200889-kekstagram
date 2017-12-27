@@ -10,7 +10,6 @@
     filtersBlock.classList.remove('filters-inactive');
   };
 
-
   var clearBlockPictures = function () {
     picturesContainer.innerHTML = '';
   };
